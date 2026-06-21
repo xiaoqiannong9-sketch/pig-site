@@ -29,7 +29,7 @@ export default async function handler(req, res) {
     // ============================================================
 
     // ⚠️ 把下面这个改成你自己的邮箱！
-    const YOUR_EMAIL = '1308728746@qq.com';
+    const YOUR_EMAIL = 'xiaoqiannong9@gmail.com';
 
     // Resend 默认发件人（不需要验证域名）
     const FROM_EMAIL = 'onboarding@resend.dev';
