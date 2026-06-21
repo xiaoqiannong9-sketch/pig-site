@@ -105,12 +105,6 @@
             background: linear-gradient(90deg, transparent, rgba(200, 150, 100, 0.10), transparent);
             margin: 14px auto;
         }
-        .divider-light {
-            width: 40px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(200, 150, 100, 0.06), transparent);
-            margin: 12px auto;
-        }
         .section-title {
             color: rgba(200, 150, 100, 0.18);
             font-size: 10px;
@@ -118,9 +112,6 @@
             letter-spacing: 4px;
             margin: 12px 0 6px;
             font-family: 'Segoe UI', sans-serif;
-        }
-        .section-title .icon {
-            margin-right: 6px;
         }
         .grid-3 {
             display: grid;
@@ -187,13 +178,6 @@
             color: #e8d5b8;
             font-style: normal;
         }
-        .desc-box .highlight {
-            color: #c49a6c;
-            font-style: normal;
-            font-weight: 700;
-        }
-
-        /* 🧠 性格侧写 - 独立模块 */
         .personality-box {
             background: linear-gradient(135deg, rgba(200, 150, 100, 0.06), rgba(200, 150, 100, 0.02));
             border: 1px solid rgba(200, 150, 100, 0.08);
@@ -229,7 +213,6 @@
             font-style: normal;
             font-weight: 700;
         }
-
         .oracle-box {
             background: rgba(200, 150, 100, 0.02);
             border: 1px solid rgba(200, 150, 100, 0.04);
@@ -615,7 +598,6 @@
         // ============================================================
 
         function getPigIndex(month, day, year, q1, q2, q3) {
-            // 把三道题的答案转成数字
             const qMap = { 'A': 1, 'B': 2, 'C': 3, 'D': 4 };
             const qSum = qMap[q1] + qMap[q2] + qMap[q3];
             const bazi = getBaZi(year, month, day);
@@ -745,7 +727,6 @@
 
             <div class="divider"></div>
 
-            <!-- 三柱信息 -->
             <div class="grid-3">
                 <div class="grid-item">
                     <div class="label">🌟 星象猪格</div>
@@ -763,41 +744,35 @@
 
             <div class="divider"></div>
 
-            <!-- 🧠 性格侧写（独立模块，来自三道题） -->
             <div class="personality-box">
                 <div class="label">🧠 心性侧写 · 来自你的三问答案</div>
                 <div class="content">${personality}</div>
             </div>
 
-            <div class="divider-light"></div>
+            <div class="divider"></div>
 
-            <!-- 猪格特征 -->
-            <div class="section-title"><span class="icon">🧬</span>天命猪格</div>
+            <div class="section-title">🧬 天命猪格</div>
             <div class="trait-list">
                 ${pig.traits.map(t => `<span class="trait">#${t}</span>`).join('')}
             </div>
 
             <div class="divider"></div>
 
-            <!-- 品种描述 -->
             <div class="section-title">📝 本命猪性</div>
             <div class="desc-box">
                 <p>${pig.description}</p>
             </div>
 
-            <!-- 饲养指南 -->
             <div class="section-title">🍽️ 饲养指南</div>
             <div class="desc-box" style="border-left-color: rgba(200,150,100,0.15);">
                 <p>${pig.care}</p>
             </div>
 
-            <!-- 天命猪签 -->
             <div class="oracle-box">
                 <div class="label">📜 天命猪签</div>
                 <div class="content">“<span class="highlight">${oracle}</span>”</div>
             </div>
 
-            <!-- 今日猪事 -->
             <div class="oracle-box" style="background:rgba(200,150,100,0.015); border-color:rgba(200,150,100,0.03);">
                 <div class="label">🐽 今日猪事</div>
                 <div class="content" style="font-size:14px;">${randomFact}</div>
