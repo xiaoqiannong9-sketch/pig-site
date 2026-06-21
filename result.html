@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐷 天命猪格鉴定报告</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: radial-gradient(ellipse at 50% 0%, #1a0f0a 0%, #0d0806 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Georgia', serif;
+            padding: 20px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(200, 150, 100, 0.10);
+            border-radius: 56px;
+            padding: 40px 32px;
+            max-width: 540px;
+            width: 100%;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7);
+            animation: fadeUp 0.9s ease-out;
+            position: relative;
+        }
+        .card::before {
+            content: '◆ ◇ ◆ ◇ ◆';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(200, 150, 100, 0.05);
+            font-size: 11px;
+            letter-spacing: 8px;
+            background: #0d0806;
+            padding: 0 16px;
+        }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0) rotate(-3deg);
+            }
+            50% {
+                transform: translateY(-6px) rotate(3deg);
+            }
+        }
+        .pig-emoji {
+            font-size: 72px;
+            text-align: center;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+        .center {
+            text-align: center;
+        }
+        .badge-main {
+            display: inline-block;
+            background: linear-gradient(135deg, #8b6b4a, #c49a6c);
+            color: #0d0806;
+            font-weight: 700;
+            font-size: 24px;
+            padding: 6px 28px;
+            border-radius: 40px;
+            margin: 8px 0 4px;
+            letter-spacing: 3px;
+            font-family: 'Georgia', serif;
+        }
+        .title {
+            text-align: center;
+            margin: 4px 0;
+        }
+        .title h1 {
+            color: #e8d5b8;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        .title .sub {
+            color: rgba(200, 150, 100, 0.18);
+            font-size: 12px;
+            letter-spacing: 4px;
+            font-style: italic;
+        }
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(200, 150, 100, 0.10), transparent);
+            margin: 14px auto;
+        }
+        .divider-light {
+            width: 40px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(200, 150, 100, 0.06), transparent);
+            margin: 12px auto;
+        }
+        .section-title {
+            color: rgba(200, 150, 100, 0.18);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin: 12px 0 6px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .section-title .icon {
+            margin-right: 6px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin: 6px 0 10px;
+        }
+        .grid-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(200, 150, 100, 0.04);
+            border-radius: 14px;
+            padding: 10px 6px;
+            text-align: center;
+        }
+        .grid-item .label {
+            color: rgba(200, 150, 100, 0.12);
+            font-size: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .grid-item .value {
+            color: #e8d5b8;
+            font-size: 15px;
+            font-weight: 700;
+            margin-top: 2px;
+            letter-spacing: 1px;
+        }
+        .grid-item .value.gold {
+            color: #c49a6c;
+        }
+        .grid-item .value.purple {
+            color: #b8a0d4;
+        }
+        .trait-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin: 4px 0 8px;
+        }
+        .trait {
+            background: rgba(200, 150, 100, 0.05);
+            border: 1px solid rgba(200, 150, 100, 0.05);
+            border-radius: 30px;
+            padding: 4px 16px;
+            color: rgba(200, 150, 100, 0.5);
+            font-size: 13px;
+            font-style: italic;
+        }
+        .desc-box {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin: 4px 0 8px;
+            border-left: 2px solid rgba(200, 150, 100, 0.08);
+        }
+        .desc-box p {
+            color: rgba(200, 150, 100, 0.55);
+            font-size: 14px;
+            line-height: 1.9;
+            font-style: italic;
+        }
+        .desc-box strong {
+            color: #e8d5b8;
+            font-style: normal;
+        }
+        .desc-box .highlight {
+            color: #c49a6c;
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        /* 🧠 性格侧写 - 独立模块 */
+        .personality-box {
+            background: linear-gradient(135deg, rgba(200, 150, 100, 0.06), rgba(200, 150, 100, 0.02));
+            border: 1px solid rgba(200, 150, 100, 0.08);
+            border-radius: 16px;
+            padding: 18px 20px;
+            margin: 8px 0 10px;
+            position: relative;
+        }
+        .personality-box::before {
+            content: '🧠';
+            position: absolute;
+            top: -10px;
+            left: 16px;
+            font-size: 18px;
+            background: #0d0806;
+            padding: 0 6px;
+        }
+        .personality-box .label {
+            color: rgba(200, 150, 100, 0.12);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 6px;
+        }
+        .personality-box .content {
+            color: rgba(200, 150, 100, 0.6);
+            font-size: 15px;
+            line-height: 1.8;
+            font-style: italic;
+        }
+        .personality-box .content strong {
+            color: #c49a6c;
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        .oracle-box {
+            background: rgba(200, 150, 100, 0.02);
+            border: 1px solid rgba(200, 150, 100, 0.04);
+            border-radius: 14px;
+            padding: 14px 18px;
+            margin: 8px 0;
+            text-align: center;
+        }
+        .oracle-box .label {
+            color: rgba(200, 150, 100, 0.10);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+        .oracle-box .content {
+            color: rgba(200, 150, 100, 0.5);
+            font-size: 15px;
+            margin-top: 4px;
+            font-style: italic;
+            line-height: 1.6;
+        }
+        .oracle-box .content .highlight {
+            color: #c49a6c;
+            font-style: normal;
+        }
+        .btn-share {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border: 1px solid rgba(200, 150, 100, 0.06);
+            border-radius: 20px;
+            background: transparent;
+            color: rgba(200, 150, 100, 0.2);
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 16px;
+            letter-spacing: 3px;
+            font-family: 'Georgia', serif;
+        }
+        .btn-share:hover {
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(200, 150, 100, 0.12);
+            color: rgba(200, 150, 100, 0.5);
+        }
+        .footer {
+            color: rgba(200, 150, 100, 0.04);
+            text-align: center;
+            font-size: 10px;
+            margin-top: 14px;
+            letter-spacing: 3px;
+        }
+        @media (max-width: 480px) {
+            .card {
+                padding: 28px 18px;
+            }
+            .grid-3 {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 5px;
+            }
+            .grid-item .value {
+                font-size: 13px;
+            }
+            .badge-main {
+                font-size: 20px;
+                padding: 4px 20px;
+            }
+            .title h1 {
+                font-size: 17px;
+            }
+            .personality-box .content {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card" id="resultCard">
+        <!-- 动态渲染 -->
+    </div>
+
+    <script>
+        // ============================================================
+        // 🐷 十二种天命猪格
+        // ============================================================
+
+        const PIGS = [{
+            id: '天蓬元帅猪',
+            emoji: '🐷',
+            badge: '🌌 天蓬元帅猪',
+            element: '水',
+            elementEmoji: '💧',
+            traits: ['天庭背景', '法力无边', '偶尔上头'],
+            description: `
+                这头猪前世是天蓬元帅转世，骨子里带着一股<strong>不怒自威</strong>的气场。
+                他做事<strong>果断有魄力</strong>，认定了的事九头牛都拉不回来。
+                但他有个致命弱点——<strong>太容易上头</strong>，尤其是遇到自己感兴趣的事，
+                会一头扎进去不管不顾。本质上是个<strong>单纯又仗义</strong>的好猪，
+                就是有时候控制不住自己。
+            `,
+            care: `
+                🍽️ 饲养指南：这头猪<strong>吃软不吃硬</strong>，顺着毛捋比什么都管用。
+                需要给他足够的<strong>空间和信任</strong>，管得太严他会叛逆。
+                建议每天夸他三次以上，他会高兴得<strong>原地转圈</strong>。
+                注意：他上头的时候别拦着，等他自己冷静就行。
+            `
+        }, {
+            id: '灵山禅猪',
+            emoji: '🐽',
+            badge: '🧘 灵山禅猪',
+            element: '木',
+            elementEmoji: '🌿',
+            traits: ['佛系本系', '看破红尘', '随缘干饭'],
+            description: `
+                这头猪在灵山脚下修行了三百年，早就<strong>看透了世间万物</strong>。
+                他<strong>不争不抢</strong>，不是因为没有能力，是觉得没必要。
+                他唯一的执念就是<strong>今天的饭好不好吃</strong>。
+                看起来与世无争，其实心里跟明镜似的，
+                <strong>谁对他好、谁在演他</strong>，他一清二楚。
+                精神状态领先普通人三百年。
+            `,
+            care: `
+                🍽️ 饲养指南：这头猪<strong>不能催</strong>，越催他越慢。
+                需要提供<strong>高质量的素食</strong>，他嘴刁得很。
+                每天给他一段<strong>独处的时间</strong>，否则会陷入哲学焦虑。
+                注意：他看起来什么都不在乎，
+                但其实<strong>偷偷在乎你</strong>——只是不说。
+            `
+        }, {
+            id: '九尾灵猪',
+            emoji: '🐗',
+            badge: '🦊 九尾灵猪',
+            element: '火',
+            elementEmoji: '🔥',
+            traits: ['千面猪精', '魅惑众生', '智商碾压'],
+            description: `
+                这头猪表面上是头猪，实际是修炼了千年的<strong>九尾灵猪</strong>。
+                他有<strong>九种人格</strong>，见什么人说什么话，
+                你永远猜不到他下一秒切换成哪个模式。
+                他<strong>智商极高</strong>，擅长把别人卖了还让别人帮他数钱。
+                但他<strong>不用聪明去害人</strong>，只是用来保护自己和重要的人。
+            `,
+            care: `
+                🍽️ 饲养指南：这头猪<strong>不能按套路出牌</strong>，越常规他越烦。
+                建议<strong>三天换一种投喂策略</strong>，否则会被他反套路。
+                他<strong>嘴硬心软</strong>，骂你的时候越狠，其实越在乎你。
+                注意：他<strong>极其护短</strong>，你只要对他好一次，
+                他会记一辈子。
+            `
+        }, {
+            id: '玉面香猪',
+            emoji: '🐖',
+            badge: '🌸 玉面香猪',
+            element: '金',
+            elementEmoji: '✨',
+            traits: ['颜值担当', '天生C位', '精致主义'],
+            description: `
+                这头猪是<strong>猪界顶流</strong>，靠脸就能吃饭的那种。
+                他<strong>天生自带滤镜</strong>，连打呼噜都像在唱情歌。
+                但他不是空有其表——<strong>内在同样精致得令人发指</strong>。
+                他对<strong>生活品质要求极高</strong>，宁缺毋滥是他的信条。
+                有人说他矫情，他只会在心里翻个白眼：
+                “<strong>你们不懂什么叫体面</strong>。”
+            `,
+            care: `
+                🍽️ 饲养指南：这头猪<strong>必须被捧着</strong>，不然会枯萎。
+                投喂要<strong>摆盘精致</strong>，随便扔给他他会觉得被侮辱了。
+                每天需要<strong>照镜子不少于两小时</strong>，这不是自恋，是充电。
+                注意：他<strong>最受不了粗糙的人</strong>，
+                你要是邋里邋遢，他表面不说，内心已经给你扣分了。
+            `
+        }, {
+            id: '卧龙猪',
+            emoji: '🐲',
+            badge: '🐉 卧龙猪',
+            element: '土',
+            elementEmoji: '⛰️',
+            traits: ['大智若愚', '运筹帷幄', '深藏不露'],
+            description: `
+                这头猪表面在<strong>睡懒觉</strong>，实际心里已经盘算好了
+                <strong>未来三年的计划</strong>。他是猪中诸葛亮，
+                <strong>以静制动、以退为进</strong>是他的拿手好戏。
+                所有人都以为他只是头猪，
+                直到他<strong>突然一鸣惊人</strong>。
+                他<strong>不喜欢解释</strong>，懂的人自然懂，
+                不懂的人他也不屑于说。
+            `,
+            care: `
+                🍽️ 饲养指南：这头猪<strong>不能频繁打扰</strong>，他在思考的时候别烦他。
+                投喂要<strong>讲究时机</strong>，每次投喂前最好<strong>三顾茅庐</strong>。
+                他<strong>自带战略储备粮</strong>，饿不死。
+                注意：他是<strong>最靠谱的猪</strong>，答应你的事一定会做到，
+                只是<strong>不说漂亮话</strong>。
+            `
+        }, {
+            id: '逍遥野猪',
+            emoji: '🐗',
+            badge: '🌲 逍遥野猪',
+            element: '风',
+            elementEmoji: '🌪️',
+            traits: ['浪子回头', '不走寻常路', '社会猪'],
+            description: `
+                这头猪是猪中<strong>令狐冲</strong>，<strong>放荡不羁爱自由</strong>。
+                他不喜欢被任何规则束缚，连猪圈都困不住他。
+                但他不是不负责任——他有一套<strong>自己的江湖道义</strong>，
+                比那些满口仁义道德的猪<strong>靠谱得多</strong>。
+                他<strong>讲义气、重感情</strong>，只是不挂在嘴上。
+            `,
+            care: `
+                🍽️ 饲养指南：这头猪<strong>不能圈养</strong>，只能散养。
+                给他划一片<strong>自由活动的范围</strong>，他会自己回来。
+                投喂要<strong>自然随机</strong>，定时定点会让他逆反。
+                建议定期播放<strong>《沧海一声笑》</strong>维持精神稳定。
+                注意：他<strong>最怕别人跟他来真的</strong>——
+                你一旦认真了，他就跑不掉了。
+            `
+        }, {
+            id: '福禄寿猪',
+            emoji: '🧧',
+            badge: '🧧 福禄寿猪',
+            element: '福',
+            elementEmoji: '🎋',
+            traits: ['好运连连', '逢凶化吉', '锦鲤本鲤'],
+            description: `
+                这头猪是被<strong>福禄寿三星联合祝福</strong>的幸运猪。
+                他这辈子最大的烦恼就是——<strong>太幸运了</strong>。
+                买彩票中奖、走路捡钱、发呆被馅饼砸中，
+                都是他的<strong>日常操作</strong>。
+                但他<strong>不贪心</strong>，得了好处会分给别人，
+                这才是他<strong>好运源源不断</strong>的真正原因。
+            `,
+            care: `
+                🍽️ 饲养指南：这头猪<strong>自带好运磁场</strong>，养他的人也能沾光。
+                建议投喂<strong>元宝形状的食物</strong>，可增强财运。
+                每天<strong>摸头三次</strong>，可传递好运。
+                注意：他是<strong>所有人的吉祥物</strong>，
+                但请记住——他首先是<strong>你的猪</strong>。
+            `
+        }, {
+            id: '憨憨猪',
+            emoji: '🐷',
+            badge: '🤤 憨憨猪',
+            element: '光',
+            elementEmoji: '☀️',
+            traits: ['天真无邪', '快乐笨蛋', '治愈天使'],
+            description: `
+                这头猪是猪中<strong>治愈系</strong>，他的笑容能<strong>融化一切烦恼</strong>。
+                他<strong>智商不高但情商极高</strong>，
+                总能让人忍不住想<strong>保护他</strong>。
+                你以为他傻？其实他<strong>比谁都敏感</strong>，
+                他只是<strong>选择用善良面对世界</strong>。
+                他存在的意义就是让周围的人觉得——
+                “<strong>这世界还是很可爱的</strong>。”
+            `,
+            care: `
+                🍽️ 饲养指南：这头猪需要<strong>大量投喂糖果和快乐</strong>。
+                每天<strong>夸奖三次以上</strong>，否则会枯萎。
+                建议搭配<strong>可爱视频</strong>使用，效果加倍。
+                注意：他<strong>太容易被忽悠了</strong>，
+                请务必<strong>保护好他</strong>，别让人骗走他的零食。
+            `
+        }, {
+            id: '钢铁猪',
+            emoji: '🐗',
+            badge: '⚙️ 钢铁猪',
+            element: '金',
+            elementEmoji: '⚔️',
+            traits: ['执行力爆表', '说到做到', '猪中卷王'],
+            description: `
+                这头猪是<strong>猪中钢铁侠</strong>，目标明确，<strong>行动力拉满</strong>。
+                他最讨厌<strong>拖延和借口</strong>，对自己狠起来连自己都怕。
+                但他<strong>不卷别人</strong>——他只卷自己。
+                他对朋友<strong>仗义得没话说</strong>，
+                你找他帮忙，他嘴上说“麻烦死了”，
+                然后<strong>第一个到</strong>。
+            `,
+            care: `
+                🍽️ 饲养指南：这头猪需要<strong>高蛋白高能量</strong>的食物。
+                每天需要<strong>安排运动时间</strong>，否则会焦虑。
+                建议搭配<strong>《钢铁是怎样炼成的》</strong>食用。
+                注意：他<strong>太拼了</strong>，请定期提醒他<strong>休息</strong>，
+                不然他会把自己累趴下。
+            `
+        }, {
+            id: '桃花猪',
+            emoji: '🐽',
+            badge: '💕 桃花猪',
+            element: '木',
+            elementEmoji: '🌸',
+            traits: ['人见人爱', '桃花不断', '情话满分'],
+            description: `
+                这头猪天生<strong>桃花运旺盛</strong>，走到哪里都有人喜欢。
+                他<strong>情商极高</strong>，知道什么时候说什么话，
+                和他待在一起<strong>永远不会冷场</strong>。
+                但他不滥情——他只是<strong>天生招人喜欢</strong>，
+                他自己也很苦恼（才怪）。
+            `,
+            care: `
+                🍽️ 饲养指南：这头猪需要<strong>大量的社交</strong>，否则会枯萎。
+                投喂要<strong>浪漫一点</strong>，摆个心形什么的他会很开心。
+                注意：他是<strong>所有人的桃花</strong>，
+                但请记住——他只想<strong>为你一个人开</strong>。
+            `
+        }, {
+            id: '学霸猪',
+            emoji: '🦉',
+            badge: '📚 学霸猪',
+            element: '土',
+            elementEmoji: '📖',
+            traits: ['学富五车', '知识渊博', '人间清醒'],
+            description: `
+                这头猪是<strong>猪中博士</strong>，上知天文下知地理。
+                他不是为了炫耀——他是<strong>真的好奇</strong>。
+                他<strong>看问题比谁都透彻</strong>，
+                你还在纠结的时候，他已经看到了<strong>三种结局</strong>。
+                但他<strong>不爹味</strong>，你不问他就不说，
+                等你问了，他会用<strong>最简单的话</strong>讲给你听。
+            `,
+            care: `
+                🍽️ 饲养指南：这头猪需要<strong>大量书籍</strong>当零食。
+                建议定期带他去<strong>图书馆/博物馆</strong>充电。
+                和他聊天要<strong>带点深度</strong>，不然他会走神。
+                注意：他是<strong>行走的百科全书</strong>，
+                遇到任何问题——<strong>问他就对了</strong>。
+            `
+        }, {
+            id: '夜行猪',
+            emoji: '🦇',
+            badge: '🌙 夜行猪',
+            element: '水',
+            elementEmoji: '🌊',
+            traits: ['夜猫子本猫', '夜间灵感爆棚', '白天装死'],
+            description: `
+                这头猪是<strong>夜行动物</strong>，白天昏昏欲睡，
+                一到了晚上就<strong>精神百倍</strong>。
+                他的<strong>灵感全在半夜爆发</strong>，
+                深夜两点是他<strong>效率最高</strong>的时候。
+                他不是故意熬夜——是<strong>夜晚太迷人</strong>了，
+                他舍不得睡。
+            `,
+            care: `
+                🍽️ 饲养指南：这头猪<strong>白天别吵他</strong>，让他睡。
+                投喂要<strong>集中在晚上</strong>，半夜加餐他会感动哭。
+                建议提供<strong>暖色灯光</strong>和<strong>安静环境</strong>。
+                注意：他的<strong>灵魂在夜晚苏醒</strong>，
+                如果你想听到他最真实的想法——<strong>半夜找他聊天</strong>。
+            `
+        }];
+
+        // ============================================================
+        // 八字推演
+        // ============================================================
+
+        const TIANGAN = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+        const DIZHI = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+        const SHENGXIAO = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪'];
+        const ZODIAC_SIGNS = ['摩羯', '水瓶', '双鱼', '白羊', '金牛', '双子', '巨蟹', '狮子', '处女', '天秤', '天蝎', '射手'];
+
+        function getZodiac(month, day) {
+            const dates = [20, 19, 21, 20, 21, 22, 23, 23, 23, 24, 23, 22];
+            const idx = (month === 1 && day <= dates[0]) ? 11 :
+                (day <= dates[month - 1]) ? month - 1 : month;
+            return ZODIAC_SIGNS[idx % 12];
+        }
+
+        function getBaZi(year, month, day) {
+            const yearStem = TIANGAN[(year - 4) % 10];
+            const yearBranch = DIZHI[(year - 4) % 12];
+            const monthStem = TIANGAN[(month + 1) % 10];
+            const monthBranch = DIZHI[(month + 1) % 12];
+            const dayStem = TIANGAN[(day + month) % 10];
+            const dayBranch = DIZHI[(day + month) % 12];
+            return {
+                year: yearStem + yearBranch,
+                month: monthStem + monthBranch,
+                day: dayStem + dayBranch,
+                shengxiao: SHENGXIAO[(year - 4) % 12]
+            };
+        }
+
+        // ============================================================
+        // 核心算法
+        // ============================================================
+
+        function getPigIndex(month, day, year, q1, q2, q3) {
+            // 把三道题的答案转成数字
+            const qMap = { 'A': 1, 'B': 2, 'C': 3, 'D': 4 };
+            const qSum = qMap[q1] + qMap[q2] + qMap[q3];
+            const bazi = getBaZi(year, month, day);
+            const hash = (bazi.year.charCodeAt(0) * 31 +
+                    bazi.month.charCodeAt(0) * 17 +
+                    bazi.day.charCodeAt(0) * 7 +
+                    month * 13 +
+                    day * 5 +
+                    qSum * 11) % 12;
+            return hash;
+        }
+
+        // ============================================================
+        // 生成性格侧写
+        // ============================================================
+
+        const TRAIT_MAP = {
+            'q1_A': '挑战者',
+            'q1_B': '品味家',
+            'q1_C': '冒险者',
+            'q1_D': '务实者',
+            'q2_A': '自由魂',
+            'q2_B': '敏感心',
+            'q2_C': '安全感',
+            'q2_D': '重情义',
+            'q3_A': '知足者',
+            'q3_B': '探索者',
+            'q3_C': '逍遥派',
+            'q3_D': '意义追寻者'
+        };
+
+        function generatePersonality(q1, q2, q3) {
+            const t1 = TRAIT_MAP[`q1_${q1}`] || '未知';
+            const t2 = TRAIT_MAP[`q2_${q2}`] || '未知';
+            const t3 = TRAIT_MAP[`q3_${q3}`] || '未知';
+
+            const templates = [
+                `你是一个<strong>${t1}</strong>型的人。你渴望${q1 === 'A' ? '征服与突破' : q1 === 'B' ? '优雅与品质' : q1 === 'C' ? '速度与激情' : '安稳与实在'}。你的内心深处住着一个<strong>${t2}</strong>，${q2 === 'A' ? '讨厌被任何形式的牢笼困住' : q2 === 'B' ? '比谁都在意别人眼中的自己' : q2 === 'C' ? '最怕的是失去基本的安全感' : q2 === 'D' ? '表面坚强，其实最怕被丢下'}。而你对未来的态度是一个<strong>${t3}</strong>——${q3 === 'A' ? '你相信快乐就是最大的意义' : q3 === 'B' ? '你永远对未知保持好奇' : q3 === 'C' ? '你的终极追求是自由自在' : q3 === 'D' ? '你愿意用辛苦换取值得的人生'}。`,
+
+                `你的人生哲学是：<strong>${t1} + ${t2} + ${t3}</strong>。你喜欢${q1 === 'A' ? '不按常理出牌' : q1 === 'B' ? '把日子过出仪式感' : q1 === 'C' ? '活在此刻的快感中' : q1 === 'D' ? '低调地做好自己的事'}。你害怕${q2 === 'A' ? '被驯服' : q2 === 'B' ? '被误解' : q2 === 'C' ? '没着落' : q2 === 'D' ? '被遗忘'}。你相信${q3 === 'A' ? '开心就好' : q3 === 'B' ? '世界很大值得去看看' : q3 === 'C' ? '不要被任何东西绑架' : q3 === 'D' ? '人生必须有意义'}。`,
+
+                `你的心性密码是 <strong>「${t1} · ${t2} · ${t3}」</strong>。你像一只${q1 === 'A' ? '翻山越岭的野猪' : q1 === 'B' ? '优雅踱步的香猪' : q1 === 'C' ? '横冲直撞的暴走猪' : q1 === 'D' ? '默默拱土的憨猪'}。你的软肋是${q2 === 'A' ? '被圈养' : q2 === 'B' ? '被否定' : q2 === 'C' ? '饿肚子' : q2 === 'D' ? '没朋友'}。你的终极信念是${q3 === 'A' ? '快乐无罪' : q3 === 'B' ? '生命在于体验' : q3 === 'C' ? '自由万岁' : q3 === 'D' ? '活出意义'}。`
+            ];
+
+            return templates[Math.floor(Math.random() * templates.length)];
+        }
+
+        // ============================================================
+        // 其他辅助
+        // ============================================================
+
+        function getOracle(name, bazi, pig) {
+            const oracles = [
+                `观${name}之猪相，${bazi.year}年${bazi.month}月${bazi.day}日生，
+                得天蓬之气，秉${pig.traits[0]}之德。此猪${pig.traits[1]}，
+                今生${pig.traits[2]}。宜${['投喂', '放养', '夸奖', '陪伴', '理解', '信任'][Math.floor(Math.random() * 6)]}，
+                忌${['打压', '忽视', '欺骗', '控制', '冷落'][Math.floor(Math.random() * 5)]}。`,
+
+                `${name}者，${bazi.shengxiao}命，猪格清奇。
+                此猪生而${pig.traits[0]}，长而${pig.traits[1]}，
+                终而${pig.traits[2]}。遇水则发，遇饭则狂，
+                遇${['知己', '良人', '贵人'][Math.floor(Math.random() * 3)]}则安。`,
+
+                `乾道成猪，坤道成猪。${name}之猪格，
+                得${['天地', '日月', '星辰'][Math.floor(Math.random() * 3)]}之气，
+                兼${['五行', '八卦', '四象'][Math.floor(Math.random() * 3)]}之妙。
+                此生唯一缺憾：${['太能吃', '太可爱', '太善良', '太优秀'][Math.floor(Math.random() * 4)]}。`
+            ];
+            return oracles[Math.floor(Math.random() * oracles.length)];
+        }
+
+        const PIG_FACTS = [
+            '今日宜拱泥，忌洗澡 🛁',
+            '猪运指数：★★★★★ 宜加餐 🍖',
+            '今日幸运物：红薯，见到就炫 🍠',
+            '宇宙提醒：你该吃宵夜了 🌙',
+            '今日宜：撒娇，忌：加班 😤',
+            '猪生建议：躺平就是胜利 ✌️',
+            '今日不宜减肥，宜干饭 🍚',
+            '注意：今日有猪运，出门可能捡到吃的 🎉',
+            '今日宜：晒太阳，忌：想太多 ☀️',
+            '猪生格言：能吃是福，能睡是德 😴'
+        ];
+
+        // ============================================================
+        // 渲染
+        // ============================================================
+
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get('name') || '无名氏';
+        const birthday = params.get('birthday');
+        const q1 = params.get('q1') || 'A';
+        const q2 = params.get('q2') || 'A';
+        const q3 = params.get('q3') || 'A';
+
+        if (!birthday) {
+            document.getElementById('resultCard').innerHTML = `
+                <div style="text-align:center;color:#e8d5b8;padding:40px 20px;">
+                    <div style="font-size:60px;">🐷</div>
+                    <h1 style="margin-top:16px;font-weight:300;letter-spacing:4px;">请从鉴定所进入</h1>
+                </div>
+            `;
+            throw new Error('No birthday');
+        }
+
+        const [year, month, day] = birthday.split('-').map(Number);
+        const zodiac = getZodiac(month, day);
+        const bazi = getBaZi(year, month, day);
+        const pigIdx = getPigIndex(month, day, year, q1, q2, q3);
+        const pig = PIGS[pigIdx];
+
+        const personality = generatePersonality(q1, q2, q3);
+        const randomFact = PIG_FACTS[(month * day + pigIdx) % PIG_FACTS.length];
+        const oracle = getOracle(name, bazi, pig);
+
+        document.getElementById('resultCard').innerHTML = `
+            <span class="pig-emoji">${pig.emoji}</span>
+
+            <div class="center">
+                <div class="badge-main">${pig.badge}</div>
+            </div>
+
+            <div class="title">
+                <h1>🐽 ${name} · 天命猪格鉴定报告</h1>
+                <div class="sub">· ${month}月${day}日 · ${zodiac} · ${bazi.shengxiao}年 ·</div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 三柱信息 -->
+            <div class="grid-3">
+                <div class="grid-item">
+                    <div class="label">🌟 星象猪格</div>
+                    <div class="value gold">${zodiac}猪</div>
+                </div>
+                <div class="grid-item">
+                    <div class="label">🔥 五行猪性</div>
+                    <div class="value" style="color: ${pig.element === '金' ? '#c49a6c' : pig.element === '木' ? '#9ab88a' : pig.element === '水' ? '#8ab4c9' : pig.element === '火' ? '#c97a6a' : '#b8a0d4'}">${pig.elementEmoji} ${pig.element}猪</div>
+                </div>
+                <div class="grid-item">
+                    <div class="label">☯ 八字猪柱</div>
+                    <div class="value purple">${bazi.year}·${bazi.month}·${bazi.day}</div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 🧠 性格侧写（独立模块，来自三道题） -->
+            <div class="personality-box">
+                <div class="label">🧠 心性侧写 · 来自你的三问答案</div>
+                <div class="content">${personality}</div>
+            </div>
+
+            <div class="divider-light"></div>
+
+            <!-- 猪格特征 -->
+            <div class="section-title"><span class="icon">🧬</span>天命猪格</div>
+            <div class="trait-list">
+                ${pig.traits.map(t => `<span class="trait">#${t}</span>`).join('')}
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 品种描述 -->
+            <div class="section-title">📝 本命猪性</div>
+            <div class="desc-box">
+                <p>${pig.description}</p>
+            </div>
+
+            <!-- 饲养指南 -->
+            <div class="section-title">🍽️ 饲养指南</div>
+            <div class="desc-box" style="border-left-color: rgba(200,150,100,0.15);">
+                <p>${pig.care}</p>
+            </div>
+
+            <!-- 天命猪签 -->
+            <div class="oracle-box">
+                <div class="label">📜 天命猪签</div>
+                <div class="content">“<span class="highlight">${oracle}</span>”</div>
+            </div>
+
+            <!-- 今日猪事 -->
+            <div class="oracle-box" style="background:rgba(200,150,100,0.015); border-color:rgba(200,150,100,0.03);">
+                <div class="label">🐽 今日猪事</div>
+                <div class="content" style="font-size:14px;">${randomFact}</div>
+            </div>
+
+            <button class="btn-share" onclick="copyLink()">📋 复制我的天命猪格 · 分享猪缘</button>
+            <div class="footer">☯ 星象×八字×心性 · 三合一定命 · 仅供娱乐</div>
+        `;
+
+        function copyLink() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = document.querySelector('.btn-share');
+                btn.textContent = '✅ 已复制！快去炫耀你的猪格吧 🐷';
+                setTimeout(() => {
+                    btn.textContent = '📋 复制我的天命猪格 · 分享猪缘';
+                }, 2000);
+            }).catch(() => {
+                alert('复制链接: ' + url);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐷 天命猪格鉴定所</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: radial-gradient(ellipse at 50% 0%, #1a0f0a 0%, #0d0806 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Georgia', serif;
+            padding: 20px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(200, 150, 100, 0.10);
+            border-radius: 56px;
+            padding: 48px 40px;
+            max-width: 460px;
+            width: 100%;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7);
+            position: relative;
+        }
+        .card::before {
+            content: '◆ ◇ ◆ ◇ ◆';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(200, 150, 100, 0.05);
+            font-size: 11px;
+            letter-spacing: 8px;
+            background: #0d0806;
+            padding: 0 16px;
+        }
+        .logo {
+            font-size: 64px;
+            text-align: center;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0) rotate(-3deg);
+            }
+            50% {
+                transform: translateY(-6px) rotate(3deg);
+            }
+        }
+        h1 {
+            color: #e8d5b8;
+            font-size: 24px;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: 4px;
+        }
+        .sub {
+            color: rgba(200, 150, 100, 0.20);
+            text-align: center;
+            font-size: 12px;
+            margin: 4px 0 28px;
+            letter-spacing: 6px;
+            font-style: italic;
+        }
+        label {
+            color: rgba(200, 150, 100, 0.35);
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 4px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 16px;
+            border: 1px solid rgba(200, 150, 100, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            color: #e8d5b8;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+            margin-bottom: 18px;
+            font-family: 'Georgia', serif;
+        }
+        input:focus {
+            border-color: rgba(200, 150, 100, 0.25);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 50px rgba(200, 150, 100, 0.04);
+        }
+        input[type="date"] {
+            color-scheme: dark;
+            padding: 12px 18px;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.6) sepia(1) hue-rotate(350deg) saturate(0.5);
+            cursor: pointer;
+        }
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #8b6b4a, #c49a6c);
+            color: #0d0806;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 4px;
+            font-family: 'Georgia', serif;
+        }
+        .btn:hover {
+            transform: scale(1.01);
+            box-shadow: 0 10px 50px rgba(196, 154, 108, 0.12);
+        }
+        .footer {
+            color: rgba(200, 150, 100, 0.04);
+            text-align: center;
+            font-size: 10px;
+            margin-top: 20px;
+            letter-spacing: 3px;
+        }
+        #loading {
+            display: none;
+            text-align: center;
+            color: rgba(200, 150, 100, 0.3);
+            margin-top: 14px;
+            font-style: italic;
+            letter-spacing: 2px;
+            font-size: 13px;
+        }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(200, 150, 100, 0.08);
+            border-top-color: rgba(200, 150, 100, 0.4);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .hint {
+            color: rgba(200, 150, 100, 0.08);
+            font-size: 11px;
+            text-align: center;
+            margin-top: -10px;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <span class="logo">🐷</span>
+        <h1>天命猪格鉴定所</h1>
+        <p class="sub">✦ 星象 · 八字 · 心性 ✦</p>
+
+        <form id="step1Form">
+            <label>🐽 你的名字（或猪名）</label>
+            <input type="text" id="name" placeholder="如：佩奇" required>
+
+            <label>📅 出生日期</label>
+            <input type="date" id="birthday" required>
+
+            <button type="submit" class="btn">🔮 下一步 · 心性三问</button>
+        </form>
+
+        <div class="footer">☯ 星象×八字×心性 · 三合一定命</div>
+    </div>
+
+    <script>
+        document.getElementById('step1Form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value || '无名氏';
+            const birthday = document.getElementById('birthday').value;
+
+            if (!birthday) {
+                alert('请选择你的出生日期 🐽');
+                return;
+            }
+
+            window.location.href =
+                `/questions.html?name=${encodeURIComponent(name)}&birthday=${birthday}`;
+        });
+    </script>
+</body>
+</html>

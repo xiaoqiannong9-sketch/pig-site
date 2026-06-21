@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐷 心性三问</title>
+    <style>
+        /* 样式同上，略 */
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="progress-text" id="progressText">心性三问 · 0 / 3</div>
+        <div class="progress-bar">
+            <div class="fill" id="progressFill"></div>
+        </div>
+
+        <div class="dots" id="dots"></div>
+
+        <div id="questionContainer">
+            <div class="question-number" id="qNumber">问题 1 / 3</div>
+            <div class="question-text" id="qText">加载中...</div>
+            <div class="options" id="optionsContainer"></div>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" id="prevBtn" disabled>← 上一题</button>
+            <button class="btn" id="nextBtn" disabled>下一题 →</button>
+        </div>
+
+        <div class="footer">☯ 答案无对错 · 只影响你的心性侧写</div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 三道心性暗题
+        // ============================================================
+
+        const QUESTIONS = [{
+            id: 'q1',
+            text: '🐷 如果猪会开车，你觉得ta会买什么车？',
+            options: [
+                { value: 'A', label: '越野车，翻山越岭那种', sub: '喜欢挑战，不畏艰难' },
+                { value: 'B', label: '复古小轿车，优雅地开', sub: '注重品味，享受过程' },
+                { value: 'C', label: '速度超快的跑车，轰油门', sub: '追求刺激，活在当下' },
+                { value: 'D', label: '一辆不起眼的二手车', sub: '低调务实，不喜张扬' }
+            ]
+        }, {
+            id: 'q2',
+            text: '🐽 如果你是一头猪，你最怕什么？',
+            options: [
+                { value: 'A', label: '被关在猪圈里一辈子', sub: '渴望自由，厌恶束缚' },
+                { value: 'B', label: '被所有人当成笨猪', sub: '在意别人看法，渴望被认可' },
+                { value: 'C', label: '没有好吃的，饿肚子', sub: '务实主义者，安全感第一' },
+                { value: 'D', label: '孤独终老，没有朋友', sub: '重感情，害怕被孤立' }
+            ]
+        }, {
+            id: 'q3',
+            text: '🐗 如果有下辈子，你还想当猪吗？',
+            options: [
+                { value: 'A', label: '当！猪生太快乐了', sub: '乐观知足，享受当下' },
+                { value: 'B', label: '换一种动物试试', sub: '好奇心强，喜欢新体验' },
+                { value: 'C', label: '只要不打工，当什么都行', sub: '自由至上，讨厌内卷' },
+                { value: 'D', label: '当人吧，虽然累但有意思', sub: '追求意义，不惧挑战' }
+            ]
+        }];
+
+        // ============================================================
+        // 状态管理
+        // ============================================================
+
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get('name') || '无名氏';
+        const birthday = params.get('birthday');
+
+        let currentIndex = 0;
+        const answers = {};
+
+        function renderDots() {
+            const container = document.getElementById('dots');
+            container.innerHTML = QUESTIONS.map((_, i) =>
+                `<div class="dot ${i === currentIndex ? 'active' : (answers[QUESTIONS[i].id] ? 'done' : '')}"></div>`
+            ).join('');
+        }
+
+        function updateProgress() {
+            const total = QUESTIONS.length;
+            const done = Object.keys(answers).length;
+            const pct = Math.round((done / total) * 100);
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('progressText').textContent = `心性三问 · ${done} / ${total}`;
+        }
+
+        function renderQuestion(index) {
+            const q = QUESTIONS[index];
+            document.getElementById('qNumber').textContent = `问题 ${index + 1} / ${QUESTIONS.length}`;
+            document.getElementById('qText').innerHTML = q.text;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = q.options.map((opt, i) => `
+                    <label class="option ${answers[q.id] === opt.value ? 'selected' : ''}">
+                        <input type="radio" name="question" value="${opt.value}" 
+                               ${answers[q.id] === opt.value ? 'checked' : ''}>
+                        <span class="letter">${['A','B','C','D'][i]}</span>
+                        <span class="label">${opt.label}<span class="sub-label">${opt.sub}</span></span>
+                    </label>
+                `).join('');
+
+            container.querySelectorAll('.option').forEach(el => {
+                el.addEventListener('click', function() {
+                    const radio = this.querySelector('input[type="radio"]');
+                    radio.checked = true;
+                    answers[q.id] = radio.value;
+                    container.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                    updateButtons();
+                    renderDots();
+                    updateProgress();
+                });
+            });
+
+            if (answers[q.id]) {
+                const radio = container.querySelector(`input[value="${answers[q.id]}"]`);
+                if (radio) radio.checked = true;
+            }
+
+            updateButtons();
+            renderDots();
+            updateProgress();
+        }
+
+        function updateButtons() {
+            const q = QUESTIONS[currentIndex];
+            const hasAnswer = !!answers[q.id];
+            document.getElementById('nextBtn').disabled = !hasAnswer;
+            document.getElementById('prevBtn').disabled = currentIndex === 0;
+
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentIndex === QUESTIONS.length - 1) {
+                nextBtn.textContent = '🔮 查看我的天命猪格';
+            } else {
+                nextBtn.textContent = '下一题 →';
+            }
+        }
+
+        // ============================================================
+        // 🚀 提交时发送到后端
+        // ============================================================
+
+        async function submitAnswers() {
+            const data = {
+                name: name,
+                birthday: birthday,
+                q1: answers.q1 || 'A',
+                q2: answers.q2 || 'A',
+                q3: answers.q3 || 'A'
+            };
+
+            try {
+                // 发送到后端记录
+                const res = await fetch('/api/record', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!res.ok) {
+                    console.warn('后端记录失败，但继续跳转');
+                }
+
+                // 跳转到结果页（携带参数）
+                const params = new URLSearchParams({
+                    name: name,
+                    birthday: birthday,
+                    q1: data.q1,
+                    q2: data.q2,
+                    q3: data.q3
+                });
+                window.location.href = `/result.html?${params.toString()}`;
+
+            } catch (err) {
+                console.error('提交失败:', err);
+                // 即使后端失败，也跳转结果页
+                const params = new URLSearchParams({
+                    name: name,
+                    birthday: birthday,
+                    q1: data.q1,
+                    q2: data.q2,
+                    q3: data.q3
+                });
+                window.location.href = `/result.html?${params.toString()}`;
+            }
+        }
+
+        function goToNext() {
+            if (currentIndex < QUESTIONS.length - 1) {
+                currentIndex++;
+                renderQuestion(currentIndex);
+                document.querySelector('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                // 所有题目完成 → 提交到后端 → 跳转结果
+                submitAnswers();
+            }
+        }
+
+        function goToPrev() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderQuestion(currentIndex);
+                document.querySelector('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Enter') {
+                if (!document.getElementById('nextBtn').disabled) goToNext();
+            }
+            if (e.key === 'ArrowLeft') {
+                if (!document.getElementById('prevBtn').disabled) goToPrev();
+            }
+        });
+
+        renderQuestion(0);
+        document.getElementById('nextBtn').addEventListener('click', goToNext);
+        document.getElementById('prevBtn').addEventListener('click', goToPrev);
+    </script>
+</body>
+</html>
