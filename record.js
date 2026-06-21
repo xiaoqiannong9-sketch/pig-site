@@ -24,29 +24,24 @@ export default async function handler(req, res) {
     console.log('========================================');
 
     // ============================================================
-    // 📧 通过 Resend 发送邮件到你的邮箱
-    // 使用 Resend 默认发件人 onboarding@resend.dev
+    // 📧 通过 QQ 邮箱 SMTP 发送
     // ============================================================
 
-    // ⚠️ 把下面这个改成你自己的邮箱！
-    const YOUR_EMAIL = 'xiaoqiannong9@gmail.com';
+    // ⚠️ 把下面改成你自己的 QQ 邮箱
+    const QQ_EMAIL = '你的QQ号@qq.com';        // ← 改成你的QQ邮箱
+    const QQ_AUTH_CODE = 'ffcnbqizoyzebage';   // ← 你的授权码
 
-    // Resend 默认发件人（不需要验证域名）
-    const FROM_EMAIL = 'onboarding@resend.dev';
+    const nodemailer = require('nodemailer');
 
-    // 构建邮件内容
-    const subject = `🐷 新猪格鉴定 - ${name}`;
-    const textContent = `
-🐷 新猪格鉴定结果
-
-📛 姓名：${name}
-📅 生日：${birthday}
-❓ Q1（买车）：${q1}
-❓ Q2（最怕）：${q2}
-❓ Q3（下辈子）：${q3}
-
-发送时间：${new Date().toLocaleString('zh-CN')}
-    `;
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.qq.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: QQ_EMAIL,
+            pass: QQ_AUTH_CODE
+        }
+    });
 
     const htmlContent = `
         <!DOCTYPE html>
@@ -71,33 +66,17 @@ export default async function handler(req, res) {
     `;
 
     try {
-        const resendRes = await fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                from: `猪格鉴定所 <${FROM_EMAIL}>`,
-                to: [YOUR_EMAIL],
-                subject: subject,
-                html: htmlContent,
-                text: textContent
-            })
+        const info = await transporter.sendMail({
+            from: `"猪格鉴定所" <${QQ_EMAIL}>`,
+            to: QQ_EMAIL,
+            subject: `🐷 新猪格鉴定 - ${name}`,
+            html: htmlContent,
+            text: `姓名：${name}\n生日：${birthday}\nQ1：${q1}\nQ2：${q2}\nQ3：${q3}`
         });
 
-        const result = await resendRes.json();
-        console.log('📧 邮件发送结果:', result);
-
-        if (!resendRes.ok) {
-            console.error('❌ 邮件发送失败:', result);
-            // 即使邮件失败，也继续返回成功，不影响用户体验
-        } else {
-            console.log(`✅ 邮件已发送到 ${YOUR_EMAIL}`);
-        }
-
+        console.log('✅ 邮件已发送:', info.messageId);
     } catch (err) {
-        console.error('❌ 邮件发送异常:', err);
+        console.error('❌ 邮件发送失败:', err);
     }
 
     return res.status(200).json({
