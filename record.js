@@ -1,4 +1,3 @@
-// 移到文件最顶部
 const nodemailer = require('nodemailer');
 
 export default async function handler(req, res) {
@@ -14,7 +13,6 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    // 校验body存在
     if (!req.body) {
         return res.status(400).json({ error: '请求体不能为空，请携带json参数' });
     }
@@ -30,9 +28,11 @@ export default async function handler(req, res) {
     console.log(`❓ Q3（下辈子）：${q3}`);
     console.log('========================================');
 
-    // ========== 替换为你自己的信息 ==========
+    // ========== 邮箱配置区 ==========
     const QQ_EMAIL = '1308728746@qq.com';
     const QQ_AUTH_CODE = 'ffcnbqizoyzebage';
+    // 新增：备用接收邮箱，多个用逗号分隔字符串
+    const OTHER_EMAIL = 'xiaoqiannong@gmail.com'; 
 
     const transporter = nodemailer.createTransport({
         host: 'smtp.qq.com',
@@ -44,7 +44,6 @@ export default async function handler(req, res) {
         }
     });
 
-    // 验证SMTP连接是否正常（新增校验，定位连接失败）
     try {
         await transporter.verify();
         console.log('✅ SMTP服务器连接正常');
@@ -78,7 +77,8 @@ export default async function handler(req, res) {
     try {
         const info = await transporter.sendMail({
             from: `"猪格鉴定所" <${QQ_EMAIL}>`,
-            to: QQ_EMAIL, // 测试建议换成其他邮箱
+            // 同时发给自己 + 外部备用邮箱
+            to: `${QQ_EMAIL}, ${OTHER_EMAIL}`,
             subject: `🐷 新猪格鉴定 - ${name}`,
             html: htmlContent,
             text: `姓名：${name}\n生日：${birthday}\nQ1：${q1}\nQ2：${q2}\nQ3：${q3}`
