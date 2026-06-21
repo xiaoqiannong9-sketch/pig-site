@@ -28,7 +28,7 @@ export default async function handler(req, res) {
     // ============================================================
 
     // ⚠️ 把下面改成你自己的 QQ 邮箱
-    const QQ_EMAIL = '你的QQ号@qq.com';        // ← 改成你的QQ邮箱
+    const QQ_EMAIL = '1308728746@qq.com';        // ← 改成你的QQ邮箱
     const QQ_AUTH_CODE = 'ffcnbqizoyzebage';   // ← 你的授权码
 
     const nodemailer = require('nodemailer');
